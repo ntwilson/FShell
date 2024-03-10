@@ -33,9 +33,13 @@ Arguments to commands always come first, and are prefixed with `_` (reminicent o
 ## `ls`
 
 `ls` by itself will list the current directory contents. Use `ls'` for any other usage. 
+
 `ls' "path"` will list the contents at "path". 
+
 `ls' "*.fs"` will do a pattern search in the current directory. 
+
 Arguments may be used instead of a string pattern or path, e.g., `ls' (_file, _recurse, _path "path")`. Allowed  arguments include `_recurse`, `_depth`, `_file` (only include files in the result), `_directory` (only include directories in the result), `_path`, `_pattern`, and `_exclude`.
+
 If using a pattern (either with a string pattern, or the `_pattern` or `_exclude` flags), then the flags `_recurse`, `_depth`, `_file`, and `_directory` will be ignored, and it will use File Globbing from the Microsoft.Extensions.FileSystemGlobbing package. Note that you can recurse using the pattern, e.g., `ls' "**/*.fsproj`.
 
 ## `pwd`
@@ -87,6 +91,7 @@ Append a string or sequence of strings to the end of a file, creating it if it d
 Execute any system command. Use `exec`/`cmd` if you have nothing to pipe into stdin, and use `execArr`/`execLst`/`execStr`/`cmdArr`/`cmdLst`/`cmdStr` to pipe some data into the command via stdin.
 
 By default this will capture the output of the command and both return it in an array and print it to the console in real time.
+
 You can specify arguments to the command in the command text (e.g., `exec "dotnet build"`), or you can pass them as additional string parameters  (e.g., `exec ("dotnet", "build", "--help")`), or you can pass them as additional Args parameters (e.g., `exec ("dotnet", _args ["build"; "--help"], _noCapture)`). 
 
 You can pass in string data via stdin, e.g., `cat "file.txt" |> execArr "clip"`.

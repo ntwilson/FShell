@@ -3,12 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>FShell</PackageId>
     <Title>FShell</Title>
-    <PackageVersion>0.1.1</PackageVersion>
+    <PackageVersion>0.1.2</PackageVersion>
     <Authors>nathan wilson</Authors>
     <Description>Turn F# FSI into a shell</Description>
     <PackageLicenseExpression>CC0-1.0</PackageLicenseExpression>
