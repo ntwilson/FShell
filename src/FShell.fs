@@ -96,21 +96,40 @@ type Cmd =
   static member touch path = File.Create(path) |> ignore
   static member exec (cmd:string, [<ParamArray>] args) = 
     let args = String.Join(" ", args |> Array.map (sprintf "\"%s\""))
-    let proc = new Process(StartInfo = ProcessStartInfo(FileName = cmd, Arguments = args))
+    let config = ProcessStartInfo(FileName=cmd, Arguments=args, RedirectStandardOutput=true)
+    let proc = new Process(StartInfo=config)
+
+    let mutable output = ResizeArray []
+    proc.OutputDataReceived.Add(fun (e:DataReceivedEventArgs) -> 
+      output.Add(e.Data)
+      printfn "%s" e.Data
+    )
+
     proc.Start() |> ignore
     proc.WaitForExit()
+    Array.ofSeq output
 
-  static member exec'' (cmd:string, [<ParamArray>] args) = fun (xs:string array) ->
+  static member execArr (cmd:string, [<ParamArray>] args) = fun (xs:string array) ->
     let args = String.Join(" ", args |> Array.map (sprintf "\"%s\""))
-    let config = ProcessStartInfo(FileName = cmd, Arguments = args, RedirectStandardInput = true)
-    let proc = new Process(StartInfo = config)
+    let config = ProcessStartInfo(FileName=cmd, Arguments=args, RedirectStandardOutput=true, RedirectStandardInput=true)
+    let proc = new Process(StartInfo=config)
+
+    let mutable output = ResizeArray []
+    proc.OutputDataReceived.Add(fun (e:DataReceivedEventArgs) -> 
+      output.Add(e.Data)
+      printfn "%s" e.Data
+    )
+
     proc.Start() |> ignore
     for x in xs do
       proc.StandardInput.WriteLine(x)
     proc.StandardInput.Close()
     proc.WaitForExit()
 
-  static member exec' (cmd:string, [<ParamArray>] args) = fun (x:string) -> Cmd.exec'' (cmd, args) [|x|]
+    Array.ofSeq output
+
+  static member execLst (cmd:string, [<ParamArray>] args) = fun (xs:string list) -> Cmd.execArr (cmd, args) (Array.ofList xs)
+  static member execStr (cmd:string, [<ParamArray>] args) = fun (x:string) -> Cmd.execArr (cmd, args) [|x|]
 
   static member start (path:string) = Process.Start("explorer", path).WaitForExit()
 
