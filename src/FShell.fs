@@ -747,8 +747,6 @@ Available arguments:
   /// Append a sequence of strings as lines to a file. If the file does not exist, it will be created.
   static member append (lines:string seq) = fun (path:string) -> File.AppendAllLines(path, lines)
 
-#if INTERACTIVE
-fsi.AddPrinter(fun (x:string seq) -> Environment.NewLine + String.Join(Environment.NewLine, x))
-#endif
+let fshPrinter = fun (x:string seq) -> Environment.NewLine + String.Join(Environment.NewLine, x)
 
 open type FShell

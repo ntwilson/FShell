@@ -4,7 +4,8 @@ Turn F# FSI into a shell.
 Run in an FSI window or a script file by adding at the top:
 ```F#
 #r "nuget: FShell"
-open type FShell;;
+open type FShell
+fsi.AddPrinter fshPrinter;;
 ```
 
 This package adds convenience functions for FSI to make typical shell operations easier. The commands available are
@@ -23,7 +24,7 @@ This package adds convenience functions for FSI to make typical shell operations
 - `append`
 - `exec`/`execArr`/`execLst`/`execStr`/`cmd`/`cmdArr`/`cmdLst`/`cmdStr`
 
-In addition, referencing this package will cause any sequence of strings to be printed in FSI with one string per line, so that operations like `ls` or `cat` that return an array of strings will display equivalently to many other shell environments.
+In addition, you may enable any sequence of strings printing in FSI with one string per line, so that operations like `ls` or `cat` that return an array of strings will display equivalently to many other shell environments. This is achieved with the `fsi.AddPrinter fshPrinter` command.
 
 This package also provides a `|%` and `|?` operator that behave similarly to the corresponding operators in PowerShell.
 
@@ -95,10 +96,10 @@ Available arguments:
 - `_noCapture` - Do not capture and return the output of the command. This will override `_silent`
 - `_args` - A sequence of string arguments to pass to the command
 
-## |%
+## `|%`
 
 Iterate/map over a sequence, similar to the equivalent operator in PowerShell. E.g., `cmd "git branch" |% _.Trim()`
 
-## |? 
+## `|?`
 
 Filter a sequence, similar to the equivalent operator in PowerShell. E.g., `cmd ("git branch", _silent) |? (not << _.StartsWith("*"))`
